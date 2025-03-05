@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>张本智和赛事记录汇总</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --blue-50: #f0f9ff;
+            --blue-100: #e0f2fe;
+            --blue-200: #bae6fd;
+            --blue-300: #7dd3fc;
+            --blue-400: #38bdf8;
+            --blue-500: #0ea5e9;
+            --blue-600: #0284c7;
+            --blue-700: #0369a1;
+            --blue-800: #075985;
+            --blue-900: #0c4a6e;
+            --primary-color: var(--blue-700);
+            --sidebar-level1: var(--blue-50);
+            --sidebar-level2: var(--blue-100);
+            --sidebar-level3: var(--blue-200);
+            --win-color: #27ae60;
+            --lose-color: #e74c3c;
+            --final-win: #f1c40f;
+        }
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f8f9fa;
+        }
+
+        .header {
+            text-align: center;
+            padding: 2rem;
+            background: var(--primary-color);
+            color: white;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+        }
+
+        .container {
+            display: flex;
+            gap: 30px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .sidebar {
+            width: 320px;
+            background: var(--blue-50);
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border: 1px solid var(--blue-200);
+        }
+
+        .content {
+            flex: 1;
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        /* 修复搜索框样式 */
+        .search-box {
+            width: calc(100% - 30px);
+            margin: 0 auto 20px;
+            position: relative;
+            box-sizing: border-box;
+        }
+
+        #searchInput {
+            width: 100%;
+            padding: 10px 35px 10px 15px;
+            border: 2px solid var(--primary-color);
+            border-radius: 20px;
+            font-size: 14px;
+            transition: all 0.3s;
+            box-sizing: border-box;
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--blue-500);
+            cursor: pointer;
+        }
+
+        /* 层级颜色 */
+        details > summary {
+            background: var(--sidebar-level1);
+        }
+        details > details > summary {
+            background: var(--sidebar-level2);
+        }
+        details > details > details > summary {
+            background: var(--sidebar-level3);
+        }
+
+        details > summary {
+            cursor: pointer;
+            padding: 12px;
+            color: var(--blue-900);
+            font-weight: 600;
+            transition: all 0.2s;
+            list-style: none;
+            position: relative;
+            border-radius: 6px;
+            margin: 2px 0;
+        }
+
+        details > summary::after {
+            content: "\f078";
+            font-family: "Font Awesome 5 Free";
+            font-weight: 900;
+            position: absolute;
+            right: 15px;
+            color: var(--blue-500);
+            transition: transform 0.2s;
+        }
+
+        details[open] > summary::after {
+            transform: rotate(180deg);
+        }
+
+        .event-link {
+            display: block;
+            padding: 10px 15px;
+            margin: 5px 0 5px 15px;
+            border-radius: 5px;
+            color: var(--blue-800);
+            transition: all 0.2s;
+            cursor: pointer;
+            border-left: 3px solid transparent;
+            background: var(--blue-50);
+        }
+
+        .event-link:hover {
+            background: var(--blue-100);
+            transform: translateX(3px);
+            border-left-color: var(--blue-400);
+        }
+
+        .match-list {
+            padding: 0;
+            margin-top: 20px;
+        }
+
+        .match-item {
+            padding: 12px;
+            margin: 8px 0;
+            background: #f8f9fa;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .final-win {
+            border-left: 4px solid var(--final-win);
+            background: #fff9e6;
+        }
+
+        .score.胜 { color: var(--win-color); }
+        .score.负 { color: var(--lose-color); }
+        .icon-trophy {
+            color: var(--final-win);
+            min-width: 24px;
+        }
+
+        .search-highlight {
+            animation: highlight 1.5s ease-in-out;
+            background: linear-gradient(90deg, transparent, var(--blue-100));
+        }
+
+        @keyframes highlight {
+            0% { background-color: var(--final-win); }
+            100% { background-color: transparent; }
+        }
+
+        .fa-trophy {
+            margin-right: 8px;
+            filter: drop-shadow(0 0 2px rgba(241, 196, 15, 0.5));
+        }
+
+
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1><i class="fas fa-table-tennis"></i> 张本智和赛事记录汇总</h1>
+        <p>①暂时更新至2025年的国内赛事，国外赛事不定期施工 ②搜索功能未上线，目前还是超绝未完成体</p>
+    </div>
+
+    <div class="container">
+        <div class="sidebar" id="sidebar">
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="搜索比赛名称或对手...">
+                <i class="fas fa-search search-icon"></i>
+                <div class="search-results" id="searchResults"></div>
+            </div>
+        </div>
+        <div class="content" id="content"></div>
+    </div>
+
+    <script>
+        const fullData = {
+            "国内赛事": {
+                "2009": {
+                    "7月": [{
+                        "比赛名称": "平成21年度 全日本選手権ホープス･カブ･バンビの部",
+                        "日期": "2009年7月24～26日",
+                        "地点": "兵庫県・神戸総合公園内体育館",
+                        "项目": {
+                            "バンビ男子シングルス": [
+                                { "回战": "1回战", "对手": "安達幸平", "比分": "3-0", "结果": "胜" },
+                                { "回战": "2回战", "对手": "三谷尚輝", "比分": "3-0", "结果": "胜" },
+                                { "回战": "3回战", "对手": "加山裕", "比分": "2-3", "结果": "负" }
+                            ]
+                        }
+                    }]
+                },
+                "2010": {
+                    "7月": [{
+                        "比赛名称": "平成22年度 全日本選手権ホープス･カブ･バンビの部",
+                        "日期": "2010年7月23～25日",
+                        "地点": "兵庫県・神戸総合公園内体育館",
+                        "项目": {
+                            "バンビ男子シングルス": [
+                                { "回战": "2回战", "对手": "喜多涼一", "比分": "3-0", "结果": "胜" },
+                                { "回战": "3回战", "对手": "佐々木駿和", "比分": "3-0", "结果": "胜" },
+                                { "回战": "四分之一决赛", "对手": "米倉勝", "比分": "3-0 (3,5,1)", "结果": "胜" },
+                                { "回战": "半决赛", "对手": "曽根翔", "比分": "3-0 (5,2,7)", "结果": "胜" },
+                                { "回战": "决赛", "对手": "稲葉遼", "比分": "3-0 (5,3,4)", "结果": "胜", "决赛": true }
+                            ]
+                        }
+                    }]
+                },
+                "2011": {
+                    "7月": [{
+                        "比赛名称": "平成23年度 全日本選手権ホープス･カブ･バンビの部",
+                        "日期": "2011年7月22～24日",
+                        "地点": "兵庫県・グリーンアリーナ神戸",
+                        "项目": {
+                            "バンビ男子シングルス": [
+                                { "回战": "2回战", "对手": "岡野俊介", "比分": "3-0", "结果": "胜" },
+                                { "回战": "3回战", "对手": "北谷晋平", "比分": "3-0", "结果": "胜" },
+                                { "回战": "四分之一决赛", "对手": "篠塚大登", "比分": "3-0 (1,10,5)", "结果": "胜" },
+                                { "回战": "半决赛", "对手": "佐藤匠海", "比分": "3-1 (4,3,-9,7)", "结果": "胜" },
+                                { "回战": "决赛", "对手": "今泉蓮", "比分": "3-0 (2,7,7)", "结果": "胜", "决赛": true }
+                            ]
+                        }
+                    }],
+                    "11月": [{
+                        "比赛名称": "平成23年度 全日本選手権カデットの部",
+                        "日期": "2011年11月18～20日",
+                        "地点": "石川県・いしかわ総合スポーツセンター",
+                        "项目": {
+                            "男子ダブルス": [
+                                { "回战": "1回戦", "对手": "鹿野龍志/山中洋介", "比分": "3-0", "结果": "胜" },
+                                { "回战": "2回戦", "对手": "福田純太/楊奇真", "比分": "1-3", "结果": "负" }
+                            ],
+                            "男子13歳以下シングルス": [
+                                { "回战": "1回戦", "对手": "倉橋利弥", "比分": "3-1", "结果": "胜" },
+                                { "回战": "2回戦", "对手": "大井達矢", "比分": "3-0", "结果": "胜" },
+                                { "回战": "3回戦", "对手": "和久井亘", "比分": "3-0", "结果": "胜" },
+                                { "回战": "4回戦", "对手": "松山祐季", "比分": "0-3", "结果": "负" }
+                            ]
+                        }
+                    }]
+                },
+                "2012": {
+                    "3月": [{
+                        "比赛名称": "第9回全国ホープス選抜大会",
+                        "日期": "2012年3月23～25日",
+                        "地点": "茨城県・ひたちなか市総合運動公園体育館",
+                        "项目": {
+                            "男子団体": [
+                                { 
+                                    "回战": "準々決勝", 
+                                    "对手": "神奈川県選抜", 
+                                    "比分": "2-3", 
+                                    "结果": "负",
+                                    "详情": "張智和 3-1 杉本和也"
+                                }
+                            ]
+                        }
+                    }],
+                    "7月": [{
+                        "比赛名称": "平成24年度 全日本選手権ホープス･カブ･バンビの部",
+                        "日期": "2012年7月27～29日",
+                        "地点": "兵庫県・グリーンアリーナ神戸",
+                        "项目": {
+                            "カブ男子シングルス": [
+                                { "回战": "2回战", "对手": "田原翔太", "比分": "3-0", "结果": "胜" },
+                                { "回战": "3回战", "对手": "春名聡志", "比分": "3-0", "结果": "胜" },
+                                { "回战": "4回战", "对手": "宮本大輝", "比分": "3-0", "结果": "胜" },
+                                { "回战": "四分之一决赛", "对手": "小林広夢", "比分": "3-0", "结果": "胜" },
+                                { "回战": "半决赛", "对手": "横谷晟", "比分": "3-0", "结果": "胜" },
+                                { "回战": "决赛", "对手": "曽根翔", "比分": "3-0", "结果": "胜", "决赛": true }
+                            ]
+                        }
+                    }],
+                    "11月": [{
+                        "比赛名称": "平成24年度 全日本選手権カデットの部",
+                        "日期": "2012年11月16～18日",
+                        "地点": "埼玉県・越谷市立総合体育館",
+                        "项目": {
+                            "男子ダブルス": [
+                                { "回战": "1回戦", "对手": "桑田拓郎/磯山三四朗", "比分": "3-0", "结果": "胜" },
+                                { "回战": "2回戦", "对手": "佐藤壮介/老松陸斗", "比分": "3-1", "结果": "胜" },
+                                { "回战": "3回戦", "对手": "山口高佳嗣/橋本一輝", "比分": "3-1", "结果": "胜" },
+                                { "回战": "4回戦", "对手": "出雲卓斗/三上貴弘", "比分": "1-3", "结果": "负" }
+                            ],
+                            "男子13歳以下シングルス": [
+                                { "回战": "2回戦", "对手": "割石佑介", "比分": "3-0", "结果": "胜" },
+                                { "回战": "3回戦", "对手": "川上尚也", "比分": "3-2", "结果": "胜" },
+                                { "回战": "4回戦", "对手": "石山慎", "比分": "2-3", "结果": "负" }
+                            ]
+                        }
+                    }]
+                },
+            "2013": {
+                "1月": [{
+                    "比赛名称": "平成24年度 全日本卓球選手権大会 一般・ジュニアの部",
+                    "日期": "2013年1月15～20日",
+                    "地点": "東京都・代々木第一体育館",
+                    "项目": {
+                        "ジュニア男子シングルス": [
+                            { "回战": "1回戦", "对手": "松山祐季", "比分": "1-3(-8,-3,9,-5)", "结果": "负" }
+                        ]
+                    }
+                }],
+                "3月": [{
+                    "比赛名称": "第10回全国ホープス選抜大会",
+                    "日期": "2013年3月29～31日",
+                    "地点": "三重県・三重県営アリーナ",
+                    "项目": {
+                        "男子団体": [
+                            { 
+                                "回战": "2回戦", 
+                                "对手": "東京都選抜", 
+                                "比分": "3-2", 
+                                "结果": "胜",
+                                "详情": "④ 張智和 3(7,7,4)0 小林広夢"
+                            },
+                            { 
+                                "回战": "準決勝", 
+                                "对手": "山形県選抜", 
+                                "比分": "3-1", 
+                                "结果": "胜",
+                                "详情": "④ 張智和 3(0,4,3)0 池田陽翔"
+                            },
+                            { 
+                                "回战": "決勝", 
+                                "对手": "兵庫県選抜", 
+                                "比分": "0-3", 
+                                "结果": "负",
+                                "详情": "④ 張智和 0()0 曽根翔"
+                            }
+                        ]
+                    }
+                }],
+                "7月": [{
+                    "比赛名称": "平成25年度 全日本選手権ホープス･カブ･バンビの部",
+                    "日期": "2013年7月26～28日",
+                    "地点": "兵庫県・神戸総合公園内体育館・グリーンアリーナ神戸",
+                    "项目": {
+                        "カブ男子シングルス": [
+                            { "回战": "小组赛", "对手": "小園江敏紀", "比分": "3-0", "结果": "胜" },
+                            { "回战": "小组赛", "对手": "川村康人", "比分": "3-0", "结果": "胜" },
+                            { "回战": "小组赛", "对手": "山田康揮", "比分": "3-0", "结果": "胜" },
+                            { "回战": "2回战", "对手": "岩戸佑樹", "比分": "3-0", "结果": "胜" },
+                            { "回战": "3回战", "对手": "山下莉念", "比分": "3-0", "结果": "胜" },
+                            { "回战": "4回战", "对手": "佐藤春道", "比分": "3-0", "结果": "胜" },
+                            { "回战": "四分之一决赛", "对手": "谷垣佑真", "比分": "3-0(5,6,8)", "结果": "胜" },
+                            { "回战": "半决赛", "对手": "齋藤大耀", "比分": "3-0(6,1,4)", "结果": "胜" },
+                            { "回战": "决赛", "对手": "篠塚大登", "比分": "3-0(1,4,9)", "结果": "胜", "决赛": true }
+                        ]
+                    }
+                }],
+                "11月": [{
+                    "比赛名称": "平成25年度 全日本選手権カデットの部",
+                    "日期": "2013年11月2～4日",
+                    "地点": "愛知県・岡崎中央総合公園体育館",
+                    "项目": {
+                        "男子ダブルス": [
+                            { "回战": "1回戦", "对手": "吉澤直樹/中村竜也", "比分": "3-0(8,11,5)", "结果": "胜" },
+                            { "回战": "2回戦", "对手": "遠藤碧人/中橋敬人", "比分": "3-2(-8,-6,3,7,10)", "结果": "胜" },
+                            { "回战": "3回戦", "对手": "林孝哉/宇田幸矢", "比分": "0-3(-9,-6,-3)", "结果": "负" }
+                        ],
+                        "男子13歳以下シングルス": [
+                            { "回战": "2回戦", "对手": "大野聖弥", "比分": "3-0(6,7,6)", "结果": "胜" },
+                            { "回战": "3回戦", "对手": "細井聡真", "比分": "3-1(-9,2,7,10)", "结果": "胜" },
+                            { "回战": "4回戦", "对手": "堀川敦弘", "比分": "3-1(5,10,-9,7)", "结果": "胜" },
+                            { "回战": "5回戦", "对手": "戸上隼輔", "比分": "1-3(-9,-8,3,-11)", "结果": "负" }
+                            ]
+                        }
+                    }]
+                },
+            "2014": {
+                "1月": [{
+                    "比赛名称": "平成25年度 全日本卓球選手権大会 一般・ジュニアの部",
+                    "日期": "2014年1月14～19日",
+                    "地点": "東京都・東京体育館",
+                    "项目": {
+                        "ジュニア男子シングルス": [
+                            { "回战": "1回戦", "对手": "小澤壮", "比分": "3-1(7,-13,6,4)", "结果": "胜" },
+                            { "回战": "2回戦", "对手": "永田佳大", "比分": "3-0(9,14,8)", "结果": "胜" },
+                            { "回战": "3回戦", "对手": "伊丹雄飛", "比分": "0-3(-4,-8,-5)", "结果": "负" }
+                        ]
+                    }
+                }],
+                "3月": [{
+                    "比赛名称": "第11回全国ホープス選抜大会",
+                    "日期": "2014年3月21～23日",
+                    "地点": "山形県天童市・山形県総合運動公園体育館",
+                    "项目": {
+                        "男子団体": [
+                            { 
+                                "回战": "1回戦", 
+                                "对手": "徳島県選抜", 
+                                "比分": "3-0", 
+                                "结果": "胜",
+                                "详情": "② 張本智和 3(3,8,4)0 玉城希望"
+                            },
+                            { 
+                                "回战": "2回戦", 
+                                "对手": "愛知県選抜", 
+                                "比分": "2-3", 
+                                "结果": "负",
+                                "详情": "② 張本智和 3(7,3,5)0 久世雄登"
+                            }
+                        ]
+                    }
+                }],
+                "7月": [{
+                    "比赛名称": "平成26年度 全日本選手権ホープス･カブ･バンビの部",
+                    "日期": "2014年7月25～27日",
+                    "地点": "兵庫県・神戸総合公園内体育館・グリーンアリーナ神戸",
+                    "项目": {
+                        "ホープス男子シングルス": [
+                            { "回战": "小组赛", "对手": "下川原侑希", "比分": "3-0", "结果": "胜" },
+                            { "回战": "小组赛", "对手": "丸山由貴", "比分": "3-0", "结果": "胜" },
+                            { "回战": "2回战", "对手": "喜多涼一", "比分": "3-0", "结果": "胜" },
+                            { "回战": "3回战", "对手": "白山遼", "比分": "3-1", "结果": "胜" },
+                            { "回战": "4回战", "对手": "横谷晟", "比分": "3-1", "结果": "胜" },
+                            { "回战": "四分之一决赛", "对手": "曽根翔", "比分": "3-0(5,3,9)", "结果": "胜" },
+                            { "回战": "半决赛", "对手": "内田柊平", "比分": "3-0(9,4,5)", "结果": "胜" },
+                            { "回战": "决赛", "对手": "松田歩真", "比分": "3-0(3,6,12)", "结果": "胜", "决赛": true }
+                        ]
+                    }
+                }],
+                "8月": [{
+                    "比赛名称": "平成26年度 第32回全国ホープス卓球大会",
+                    "日期": "2014年8月17～19日",
+                    "地点": "東京都渋谷区・東京体育館",
+                    "项目": {
+                        "男子団体戦": [
+                            { 
+                                "回战": "Ｅリーグ", 
+                                "对手": "鏡ジュニア卓球クラブ・佐賀", 
+                                "比分": "3-1", 
+                                "结果": "胜",
+                                "详情": "① 張本智和 3(4,2,6)0 真木孝啓<br>④ 張本智和 3(0,1,2)0 木谷仁"
+                            },
+                            // 其他联赛和淘汰赛数据按相同模式补充...
+                            { 
+                                "回战": "決勝", 
+                                "对手": "華兵ロードスカイ・兵庫", 
+                                "比分": "3-1", 
+                                "结果": "胜",
+                                "详情": "① 張本智和 3(4,4,4)0 安江光博<br>④ 張本智和 3(-9,6,-4,6,5)2 松田歩真",
+                                "决赛": true
+                            }
+                        ]
+                    }
+                }],
+                "11月": [{
+                    "比赛名称": "平成26年度 全日本選手権カデットの部",
+                    "日期": "2014年11月1～3日",
+                    "地点": "滋賀県・大津市・滋賀県立体育館",
+                    "项目": {
+                        "男子ダブルス": [
+                            { "回战": "2回戦", "对手": "井ノ口雅幸/手塚崚馬", "比分": "3-1", "结果": "胜" },
+                            { "回战": "3回戦", "对手": "大藤和希/宮本大輝", "比分": "3-0", "结果": "胜" },
+                            { "回战": "4回戦", "对手": "阿部悠人/杉本和也", "比分": "3-2", "结果": "胜" },
+                            { "回战": "準々決勝", "对手": "加山裕/柏竹琉", "比分": "1-3(-8,3,-4,-8)", "结果": "负" }
+                        ],
+                        "男子13歳以下シングルス": [
+                            { "回战": "2回戦", "对手": "赤塚玲麻", "比分": "3-0", "结果": "胜" },
+                            { "回战": "3回戦", "对手": "阿部悠人", "比分": "3-0", "结果": "胜" },
+                            { "回战": "4回戦", "对手": "橋田訓平", "比分": "3-0", "结果": "胜" },
+                            { "回战": "5回戦", "对手": "菊地慎人", "比分": "3-0", "结果": "胜" },
+                            { "回战": "準々決勝", "对手": "加山裕", "比分": "3-2(7,9,-4,-10,3)", "结果": "胜" },
+                            { "回战": "準決勝", "对手": "寺下拓海", "比分": "3-1(1,3,-8,4)", "结果": "胜" },
+                            { "回战": "決勝", "对手": "柏竹琉", "比分": "3-0(6,4,5)", "结果": "胜", "决赛": true }
+                            ]
+                        }
+                    }]
+                },
+            "2015": {
+                "1月": [
+                    {
+                        "比赛名称": "平成26年度 全日本卓球選手権大会 一般・ジュニアの部",
+                        "日期": "2015年1月12～18日",
+                        "地点": "東京都・渋谷区・東京体育館",
+                        "项目": {
+                            "男子シングルス": [
+                                { "回战": "1回战", "对手": "神原宏士", "比分": "0-3(-9,-12,-6)", "结果": "负" }
+                            ],
+                            "ジュニア男子シングルス": [
+                                { "回战": "1回战", "对手": "辻智貴", "比分": "3-1(-9,3,6,6)", "结果": "胜" },
+                                { "回战": "2回战", "对手": "青柳遼", "比分": "3-0(5,1,3)", "结果": "胜" },
+                                { "回战": "3回战", "对手": "小澤壮", "比分": "3-0(2,5,11)", "结果": "胜" },
+                                { "回战": "4回战", "对手": "高取侑史", "比分": "3-2(9,-11,7,-6,5)", "结果": "胜" },
+                                { "回战": "5回战", "对手": "松山祐季", "比分": "3-2(8,13,-9,-8,7)", "结果": "胜" },
+                                { "回战": "四分之一决赛", "对手": "及川瑞基", "比分": "0-3(-4,-9,-9)", "结果": "负" }
+                            ]
+                        }
+                    }
+                ],
+                "3月": [
+                    {
+                        "比赛名称": "第12回全国ホープス選抜大会",
+                        "日期": "2015年3月20～22日",
+                        "地点": "富山県富山市・富山県総合体育センター",
+                        "项目": {
+                            "男子団体": [
+                                { 
+                                    "回战": "準々決勝", 
+                                    "对手": "兵庫県選抜", 
+                                    "比分": "2-3", 
+                                    "结果": "负",
+                                    "详情": "② 張本智和 3(9,3,-7,5)1 松田歩真"
+                                }
+                            ]
+                        }
+                    }
+                ],
+                "7月": [
+                    {
+                        "比赛名称": "平成27年度 全日本選手権ホープス･カブ･バンビの部",
+                        "日期": "2015年7月24～26日",
+                        "地点": "兵庫県・グリーンアリーナ神戸",
+                        "项目": {
+                            "ホープス男子シングルス": [
+                                { "回战": "小组赛", "对手": "馬場哲郎", "比分": "3-0", "结果": "胜" },
+                                { "回战": "小组赛", "对手": "橋本輝都", "比分": "3-0", "结果": "胜" },
+                                { "回战": "小组赛", "对手": "養田草太", "比分": "3-0", "结果": "胜" },
+                                { "回战": "2回战", "对手": "大久保洸", "比分": "3-0", "结果": "胜" },
+                                { "回战": "3回战", "对手": "前出陸杜", "比分": "3-0", "结果": "胜" },
+                                { "回战": "4回战", "对手": "加藤翔", "比分": "3-0", "结果": "胜" },
+                                { "回战": "四分之一决赛", "对手": "谷垣佑真", "比分": "3-0(6,3,8)", "结果": "胜" },
+                                { "回战": "半决赛", "对手": "篠塚大登", "比分": "3-0(3,3,4)", "结果": "胜" },
+                                { "回战": "决赛", "对手": "中川泰雅", "比分": "3-0(4,3,7)", "结果": "胜", "决赛": true }
+                            ]
+                        }
+                    }
+                ],
+                "8月": [
+                    {
+                        "比赛名称": "平成27年度 第33回全国ホープス卓球大会",
+                        "日期": "2015年8月15～17日",
+                        "地点": "東京都渋谷区・東京体育館",
+                        "项目": {
+                            "男子団体戦": [
+                                { 
+                                    "回战": "Ａリーグ", 
+                                    "对手": "薄根卓球・群馬", 
+                                    "比分": "3-1", 
+                                    "结果": "胜",
+                                    "详情": "① 張本智和 3(2,2,0)0 関翔琉<br>④ 張本智和 3(0,7,5)0 高柳陽斗"
+                                },
+                                // 其他联赛和淘汰赛按相同模式补充...
+                                { 
+                                    "回战": "決勝", 
+                                    "对手": "華兵ロードスカイ・兵庫", 
+                                    "比分": "3-1", 
+                                    "结果": "胜",
+                                    "详情": "① 張本智和 3(5,4,2)0 加山雅基<br>④ 張本智和 3(10,6,5)0 谷垣佑真",
+                                    "决赛": true
+                                }
+                            ]
+                        }
+                    }
+                ],
+                "10月": [
+                    {
+                        "比赛名称": "平成27年度 全日本卓球選手権大会 団体の部",
+                        "日期": "2015年10月16～18日",
+                        "地点": "岩手県・奥州市・奥州市総合体育館（Ｚアリーナ）",
+                        "项目": {
+                            "男子団体": [
+                                { 
+                                    "回战": "Ｄリーグ", 
+                                    "对手": "信号器材", 
+                                    "比分": "3-2", 
+                                    "结果": "胜",
+                                    "详情": "① 張本智和 0(-9,-5,-13)3 英田理志<br>⑤ 張本智和 3(-10,9,9,6)1 和田圭輔"
+                                },
+                                { 
+                                    "回战": "Ｄリーグ", 
+                                    "对手": "愛知工業大学", 
+                                    "比分": "2-3", 
+                                    "结果": "负",
+                                    "详情": "① 張本智和 1(-11,-6,6,-8)3 藤村友也<br>⑤ 張本智和 2(-13,-9,8,7,-8)3 松下大星"
+                                },
+                                { 
+                                    "回战": "準々決勝", 
+                                    "对手": "東京アート", 
+                                    "比分": "0-3", 
+                                    "结果": "负",
+                                    "详情": "① 張本智和 1(-8,8,-3,-3)3 張一博<br>⑤ 張本智和 0()0 村松雄斗"
+                                }
+                            ]
+                        }
+                    }
+                ],
+                "11月": [
+                    {
+                        "比赛名称": "平成27年度 全日本選手権カデットの部",
+                        "日期": "2015年11月21～23日",
+                        "地点": "高知県・高知市・高知県立春野総合運動公園体育館",
+                        "项目": {
+                            "男子ダブルス": [
+                                { "回战": "2回戦", "对手": "小林泰輝/齋藤悠一郎", "比分": "3-0", "结果": "胜" },
+                                { "回战": "3回戦", "对手": "原田哲多/次藤歩", "比分": "3-2", "结果": "胜" },
+                                { "回战": "4回戦", "对手": "堀千馬/清野晃大", "比分": "3-1", "结果": "胜" },
+                                { "回战": "準々決勝", "对手": "阿部悠人/杉本和也", "比分": "3-2(10,-6,-4,7,7)", "结果": "胜" },
+                                { "回战": "準決勝", "对手": "宇田幸矢/柏竹琉", "比分": "1-3(-5,7,-10,-9)", "结果": "负" }
+                            ],
+                            "男子13歳以下シングルス": [
+                                { "回战": "2回戦", "对手": "林優大", "比分": "3-0", "结果": "胜" },
+                                { "回战": "3回戦", "对手": "川村康人", "比分": "3-0", "结果": "胜" },
+                                { "回战": "4回戦", "对手": "林晃平", "比分": "3-0", "结果": "胜" },
+                                { "回战": "5回戦", "对手": "安江光博", "比分": "3-0(6,5,4)", "结果": "胜" },
+                                { "回战": "準々決勝", "对手": "横谷晟", "比分": "3-1(3,-9,3,5)", "结果": "胜" },
+                                { "回战": "準決勝", "对手": "曽根翔", "比分": "3-0(3,7,6)", "结果": "胜" },
+                                { "回战": "決勝", "对手": "小林広夢", "比分": "3-0(5,5,4)", "结果": "胜", "决赛": true }
+                            ]
+                        }
+                    }]
+                },
+
+                            ]
+                        }
+                    }]
+                }
+            },
+            "国际赛事": {}
+        };
+
+        // 冠军统计逻辑
+        function countChampions(dataNode) {
+            let count = 0;
+            if (Array.isArray(dataNode)) {
+                dataNode.forEach(event => {
+                    if(event.项目) Object.values(event.项目).forEach(rounds => {
+                        count += rounds.filter(r => r.决赛 && r.结果 === '胜').length
+                    });
+                });
+            } else if (typeof dataNode === 'object') {
+                Object.values(dataNode).forEach(child => count += countChampions(child));
+            }
+            return count;
+        }
+
+    // 构建导航
+    function buildNavigation() {
+        const sidebar = document.getElementById('sidebar');
+        const searchBox = document.querySelector('.search-box').outerHTML;
+        sidebar.innerHTML = searchBox;
+
+        const navContainer = document.createElement('div');
+        Object.entries(fullData).forEach(([category, years]) => {
+            const categoryEl = document.createElement('details');
+            const categoryCount = countChampions(years);
+            categoryEl.innerHTML = `
+                <summary>
+                    ${category}（${categoryCount}）
+                </summary>
+            `;
+
+            Object.keys(years).sort().forEach(year => {
+                const yearEl = document.createElement('details');
+                const yearCount = countChampions(years[year]);
+                yearEl.innerHTML = `
+                    <summary>
+                        ${year}年（${yearCount}）
+                    </summary>
+                `;
+
+                Object.entries(years[year]).forEach(([month, events]) => {
+                    const monthEl = document.createElement('details');
+                    const monthCount = countChampions(events);
+                    monthEl.innerHTML = `
+                        <summary>
+                            ${month}${renderTrophy(monthCount)}
+                        </summary>
+                    `;
+
+                    events.forEach(event => {
+                        const eventEl = document.createElement('details');
+                        const eventCount = countChampions([event]);
+                        // 修改比赛名称显示方式
+                        eventEl.innerHTML = `
+                            <summary>
+                                ${event.比赛名称}${renderTrophy(eventCount)}
+                            </summary>
+                        `;
+
+                        Object.entries(event.项目).forEach(([project, rounds]) => {
+                            const projectEl = document.createElement('a');
+                            projectEl.className = 'event-link';
+                            const projectCount = rounds.filter(r => r.决赛 && r.结果 === '胜').length;
+                            projectEl.innerHTML = `${project}${renderTrophy(projectCount)}`;
+                            projectEl.onclick = () => renderEventDetails(event, project);
+                            eventEl.appendChild(projectEl);
+                        });
+
+                        monthEl.appendChild(eventEl);
+                    });
+                    yearEl.appendChild(monthEl);
+                });
+                categoryEl.appendChild(yearEl);
+            });
+            navContainer.appendChild(categoryEl);
+        });
+        sidebar.appendChild(navContainer);
+    }
+
+    // 奖杯渲染函数（保持原有逻辑）
+    function renderTrophy(count) {
+        if(count <= 0) return '';
+        const color = count >= 3 ? '#ffd700' : '#f1c40f';
+        return Array.from({length: count}, () => 
+            `<i class="fas fa-trophy" style="color:${color}; margin-left:8px;"></i>`
+        ).join('');
+    }
+
+        // 搜索功能
+        let lastHighlight;
+        function performSearch(keyword) {
+            const clean = () => lastHighlight?.classList.remove('search-highlight');
+            if(!keyword) return clean();
+
+            const results = [];
+            const normalized = keyword.normalize('NFKC');
+            const regex = new RegExp(normalized.replace(/./g, c => 
+                `[${c}${String.fromCharCode(c.charCodeAt(0)+0x60)}]`), 'i');
+
+            Object.entries(fullData).forEach(([category, years]) => {
+                Object.entries(years).forEach(([year, months]) => {
+                    Object.entries(months).forEach(([month, events]) => {
+                        events.forEach((event, eventIndex) => {
+                            let match = false;
+                            if(regex.test(event.比赛名称.normalize('NFKC'))) match = true;
+                            Object.values(event.项目).forEach(rounds => {
+                                rounds.forEach(round => {
+                                    if(regex.test(round.对手?.normalize('NFKC'))) match = true;
+                                });
+                            });
+                            if(match) results.push({category, year, month, eventIndex});
+                        });
+                    });
+                });
+            });
+
+            clean();
+            if(results.length) {
+                const selector = `[data-path='${JSON.stringify(results[0])}']`;
+                lastHighlight = document.querySelector(selector);
+                lastHighlight?.classList.add('search-highlight');
+                lastHighlight?.scrollIntoView({behavior: 'smooth', block: 'center'});
+            }
+            return results;
+        }
+
+        // 事件监听
+        document.addEventListener('DOMContentLoaded', buildNavigation);
+        document.getElementById('searchInput').addEventListener('input', e => 
+            performSearch(e.target.value.trim()));
+        document.querySelector('.search-icon').addEventListener('click', () => 
+            performSearch(document.getElementById('searchInput').value.trim()));
+
+        // 内容渲染
+        function renderEventDetails(event, project) {
+            const content = document.getElementById('content');
+            content.innerHTML = `
+                <h2>${event.比赛名称} - ${project}</h2>
+                <div class="meta-info">
+                    <p><i class="fas fa-calendar-day"></i> ${event.日期}</p>
+                    <p><i class="fas fa-map-marker-alt"></i> ${event.地点}</p>
+                </div>
+                <ul class="match-list">
+                    ${event.项目[project].map(round => `
+                        <li class="match-item ${round.决赛 ? 'final-win' : ''}">
+                            ${round.决赛 ? '<i class="fas fa-trophy icon-trophy"></i>' : ''}
+                            <div class="round-info">
+                                <span class="score ${round.结果}">${round.回战}</span>
+                                <span>${round.对手}</span>
+                            </div>
+                            <span class="score ${round.结果}">${round.比分}</span>
+                            ${round.详情 ? `<small>${round.详情}</small>` : ''}
+                        </li>
+                    `).join('')}
+                </ul>
+            `;
+        }
+    </script>
+</body>
+</html>
