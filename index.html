@@ -166,23 +166,24 @@
             transform: rotate(180deg);
         }
 
-        details:nth-of-type(1)>summary {
+        /* 修改选择器以应用正确的颜色 */
+        .sidebar .sidebar-level-1 summary {
             background: var(--sidebar-level1);
         }
 
-        details details:nth-of-type(1)>summary {
+        .sidebar .sidebar-level-2 summary {
             background: var(--sidebar-level2);
         }
 
-        details details details:nth-of-type(1)>summary {
+        .sidebar .sidebar-level-3 summary {
             background: var(--sidebar-level3);
         }
 
-        details details details details:nth-of-type(1)>summary {
+        .sidebar .sidebar-level-4 summary {
             background: var(--sidebar-level4);
         }
 
-        details details details details details:nth-of-type(1)>summary {
+        .sidebar .sidebar-level-5 summary {
             background: var(--sidebar-level5);
         }
 
@@ -251,7 +252,7 @@
 <body>
     <div class="header">
         <h1><i class="fas fa-table-tennis"></i> 张本智和赛事记录汇总</h1>
-        <p>①暂时更新至2025年的国内赛事，国外赛事不定期施工 ②搜索功能未上线，目前还是超绝未完成体</p>
+        <p>①国内赛事查漏补缺，国外赛事缓慢施工中 ②搜索功能未上线，目前还是超绝未完成体<br><br>如遇问题请在wb留言 @XX小狗记录册</p>
     </div>
 
     <div class="container">
@@ -353,18 +354,22 @@ let searchResults = [];
 
     Object.entries(fullData).forEach(([category, years]) => {
         const categoryEl = document.createElement('details');
+        categoryEl.classList.add('sidebar-level-1');
         categoryEl.innerHTML = `<summary>${category}（${countChampions(years)}）</summary>`;
 
         Object.entries(years).forEach(([year, months]) => {
             const yearEl = document.createElement('details');
+            yearEl.classList.add('sidebar-level-2');
             yearEl.innerHTML = `<summary>${year}年（${countChampions(months)}）</summary>`;
 
             Object.entries(months).forEach(([month, events]) => {
                 const monthEl = document.createElement('details');
+                monthEl.classList.add('sidebar-level-3');
                 monthEl.innerHTML = `<summary>${month}${renderTrophy(countChampions(events))}</summary>`;
 
                 events.forEach(event => {
                     const eventEl = document.createElement('details');
+                    eventEl.classList.add('sidebar-level-4');
                     eventEl.innerHTML = `<summary>${event.比赛名称}${renderTrophy(countChampions([event]))}</summary>`;
 
                     Object.entries(event.项目).forEach(([project, rounds]) => {
@@ -491,7 +496,33 @@ let searchResults = [];
       container.innerHTML = html;
     }
 
-    
+    function renderContent(state) {
+            const content = document.getElementById('content');
+            let html = `<div class="path-nav">${state.title}</div>`;
+            
+            // 根据层级渲染不同内容
+            switch(state.level) {
+                case 0: // 分类
+                    html += `<h2>${state.title}赛事</h2>`;
+                    html += `<p>包含 ${Object.keys(state.data).length} 个赛季</p>`;
+                    break;
+                case 1: // 年份
+                    html += `<h3>${state.title}年赛事</h3>`;
+                    html += `<p>包含 ${Object.keys(state.data).length} 个月份</p>`;
+                    break;
+                case 2: // 月份
+                    html += `<h4>${state.title}</h4>`;
+                    html += `<p>包含 ${state.data.length} 项赛事</p>`;
+                    break;
+                case 3: // 赛事
+                    html += `<h4>${state.title}</h4>`;
+                    html += `<p>日期：${state.data.日期}</p>`;
+                    break;
+            }
+            
+            content.innerHTML = html;
+            updatePathNav(state);
+        }
 
         // 搜索功能
         function performSearch() {
@@ -525,11 +556,12 @@ let searchResults = [];
                                     eventIndex,
                                     event
                                 });
-                            }})
+                            }
                         })
-                    })
-                })
-            }
+                    })    
+                })            
+            })           
+        }                   
 
             const resultsEl = document.getElementById('searchResults');
             resultsEl.innerHTML = searchResults.map((result, index) => `
