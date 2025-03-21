@@ -1821,6 +1821,14 @@
         const gearRect = gearIcon.getBoundingClientRect();
         const playerRect = document.querySelector('.custom-video-player').getBoundingClientRect();
 
+        // 在显示菜单前重置所有子菜单状态
+        if (menu.style.display !== 'block') {
+            document.querySelectorAll('.submenu').forEach(sub => {
+                sub.style.display = 'none';
+                sub.parentElement.classList.remove('active');
+            });
+        }
+
         // 动态计算位置
         menu.style.left = `${gearRect.left - playerRect.left + gearRect.width/2}px`;
         menu.style.top = `${gearRect.top - playerRect.top - 10}px`;
@@ -1833,19 +1841,19 @@
     // 点击外部关闭菜单
     document.addEventListener('click', (e) => {
         if (!currentMenu) return;
-        if (!currentMenu.contains(e.target) && !e.target.closest('.fa-cog')) {
-            currentMenu.style.display = 'none';
-            currentMenu = null;
-        }
+    
         // 检查点击是否在菜单系统内
         const isClickInside = currentMenu.contains(e.target) || 
             e.target.closest('.submenu') || 
             e.target.closest('.fa-cog');
-        
+
         if (!isClickInside) {
             // 关闭所有菜单和子菜单
             currentMenu.style.display = 'none';
-            document.querySelectorAll('.submenu').forEach(sub => sub.style.display = 'none');
+            document.querySelectorAll('.submenu').forEach(sub => {
+                sub.style.display = 'none';
+                sub.parentElement.classList.remove('active');
+            });
             document.querySelectorAll('.menu-item.active').forEach(item => 
                 item.classList.remove('active')
             );
@@ -1858,12 +1866,17 @@
         const menuItem = e.target.closest('.menu-item');
         if (!menuItem) return;
         
-        // 处理子菜单切换
+        // 处理子菜单切换时关闭其他子菜单
         if (menuItem.dataset.submenu) {
             document.querySelectorAll('.menu-item.active').forEach(item => {
-                if (item !== menuItem) item.classList.remove('active');
+                if (item !== menuItem) {
+                    item.classList.remove('active');
+                    item.querySelector('.submenu').style.display = 'none';
+                }
             });
             menuItem.classList.toggle('active');
+            const submenu = menuItem.querySelector('.submenu');
+            if (submenu) submenu.style.display = submenu.style.display === 'block' ? 'none' : 'block';
             return;
         }
 
