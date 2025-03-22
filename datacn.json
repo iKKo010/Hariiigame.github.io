@@ -5478,39 +5478,45 @@
                 "回战": "R32",
                 "对手": "庄智渊（中华台北）",
                 "比分": "3-2(5-11, 11-4, 11-5, 10-12, 11-5)",
-                "结果": "胜"
+                "结果": "胜",
+                "video": "https://kljjiajia-my.sharepoint.com/personal/zoek_kljjiajia_onmicrosoft_com/_layouts/52/download.aspx?share=EanCJUy0t4tGpq7Gh8BZ2C8BNgQ5Tv-9ZtD3dHt9OXFdRg"
               },
               {
                 "回战": "R16",
                 "对手": "JANCARIK Lubomir (捷克)",
                 "比分": "3-1(11-2, 10-12, 11-7, 11-8)",
-                "结果": "胜"
+                "结果": "胜",
+                "video": "https://kljjiajia-my.sharepoint.com/personal/zoek_kljjiajia_onmicrosoft_com/_layouts/52/download.aspx?share=Ef-WzXoDOe5Pv8jh-w2ltWoBAJ2fzUYqFepIfb8HNDfe4A"
               },
               {
                 "回战": "四分之一决赛",
                 "对手": "诺沙迪·阿拉米扬（伊朗）",
                 "比分": "3-1(11-13, 11-7, 11-1, 12-10)",
-                "结果": "胜"
+                "结果": "胜",
+                "video": "https://kljjiajia-my.sharepoint.com/personal/zoek_kljjiajia_onmicrosoft_com/_layouts/52/download.aspx?share=EcOI2LQ_4g5PkT2P9XWP8dQBoQ8D9hcEaIbaJV4LvAcZ1Q"
               },
               {
                 "回战": "半决赛",
                 "对手": "户上隼辅（日本）",
                 "比分": "2-3(13-15, 12-14, 11-8, 11-9, 10-12)",
-                "结果": "负"
+                "结果": "负",
+                "video": "https://kljjiajia-my.sharepoint.com/personal/zoek_kljjiajia_onmicrosoft_com/_layouts/52/download.aspx?share=ETGaVLhNfNRLui6rKJeNZU0BuU1iWGnaGybqQC5nlMOUJg"
               }
             ],
             "男子双打": [
               {
                 "回战": "R16",
-                "对手": "周哲宇/蔡乔希(新加坡)",
+                "对手": "周哲宇/蔡劭恒(新加坡)",
                 "比分": "3-2(11-3,11-6,7-11,4-11,11-8)",
-                "结果": "胜"
+                "结果": "胜",
+                "video": "https://kljjiajia-my.sharepoint.com/personal/zoek_kljjiajia_onmicrosoft_com/_layouts/52/download.aspx?share=EXA44LxYoY9Nr9fllE2GJhkBdPYqOZNo42q5mZd2GyFw2w"
               },
               {
                 "回战": "四分之一决赛",
                 "对手": "雅库布·迪亚斯/塞缪尔·库尔奇茨基(波兰)",
                 "比分": "2-3(9-11,11-8,11-9,12-14,6-11)",
-                "结果": "负"
+                "结果": "负",
+                "video": "https://kljjiajia-my.sharepoint.com/personal/zoek_kljjiajia_onmicrosoft_com/_layouts/52/download.aspx?share=EeyQRGP5SsNKpny5Q63e2JoBpg-wEl_ObrbpxKVCMRbd1g"
               }
             ],
             "混合双打": [
@@ -5518,26 +5524,30 @@
                 "回战": "R16",
                 "对手": "南多尔·埃克塞基/多拉·马达拉斯(匈牙利)",
                 "比分": "3-0(11-8,11-6,11-4)",
-                "结果": "胜"
+                "结果": "胜",
+                "video": "https://kljjiajia-my.sharepoint.com/personal/zoek_kljjiajia_onmicrosoft_com/_layouts/52/download.aspx?share=Ee1ASrO8Oh9JrcsY2tmCQ6YBEFvidpNlLSpjGgFfwckqKA"
               },
               {
                 "回战": "四分之一决赛",
                 "对手": "BAN Ivor/ARAPOVIC Hana (克罗地亚)",
                 "比分": "3-1(11-7,11-3,10-12,11-9)",
-                "结果": "胜"
+                "结果": "胜",
+                "video": "https://kljjiajia-my.sharepoint.com/personal/zoek_kljjiajia_onmicrosoft_com/_layouts/52/download.aspx?share=EScAaP3Km5lOqnh3Tfi_jckBU0qWeeM10Lx8-IUOdQPwpw"
               },
               {
                 "回战": "半决赛",
                 "对手": "姚钧涛/吴咏琳 (中国香港)",
                 "比分": "3-1(11-9,11-6,7-11,11-5)",
-                "结果": "胜"
+                "结果": "胜",
+                "video": "https://kljjiajia-my.sharepoint.com/personal/zoek_kljjiajia_onmicrosoft_com/_layouts/52/download.aspx?share=EYBFJzdlbXJCl-Gywfy5gdABso01p2xidleVMZ7O7c9msQ"
               },
               {
                 "回战": "决赛",
                 "对手": "林钟勋/申裕斌（韩国）",
                 "比分": "3-2(11-6,3-11,11-8,2-11,11-9)",
                 "结果": "胜",
-                "决赛": true
+                "决赛": true,
+                "video": "https://kljjiajia-my.sharepoint.com/personal/zoek_kljjiajia_onmicrosoft_com/_layouts/52/download.aspx?share=EaTGswQbwqpLtcwUbJOlkEUBqsR-kqXMOT8RLhlDZiNFwg"
               }
             ]
           }
@@ -5552,39 +5562,45 @@
                 "回战": "R32",
                 "对手": "艾利克斯·勒布伦（法国）",
                 "比分": "3-1(8-11, 11-8, 11-6, 11-8)",
-                "结果": "胜"
+                "结果": "胜",
+                "video": "https://kljjiajia-my.sharepoint.com/personal/zoek_kljjiajia_onmicrosoft_com/_layouts/52/download.aspx?share=Eb_KIeyUZVdMpssavrBrnbcBm9s0BGfMGUVpAzOPnUqKjw"
               },
               {
                 "回战": "R16",
                 "对手": "奥马尔·阿萨尔（埃及）",
                 "比分": "3-0(11-4, 11-4, 11-8)",
-                "结果": "胜"
+                "结果": "胜",
+                "video": "https://kljjiajia-my.sharepoint.com/personal/zoek_kljjiajia_onmicrosoft_com/_layouts/52/download.aspx?share=EYhk3T56UZNDlUc2c6u9zfUBI_HVbFC5seNRmwnfeGE7eA"
               },
               {
                 "回战": "四分之一决赛",
                 "对手": "迪米特里·奥恰洛夫（德国）",
                 "比分": "3-0(11-9, 11-9, 11-9)",
-                "结果": "胜"
+                "结果": "胜",
+                "video": "https://kljjiajia-my.sharepoint.com/personal/zoek_kljjiajia_onmicrosoft_com/_layouts/52/download.aspx?share=EWrsSSFv5RNIrepLAARbrv0BfXJwXt3sFrzuS9a1KI3LgA"
               },
               {
                 "回战": "半决赛",
                 "对手": "费利克斯·勒布伦（法国）",
                 "比分": "2-3(4-11, 9-11, 13-11, 11-2, 6-11)",
-                "结果": "负"
+                "结果": "负",
+                "video": "https://kljjiajia-my.sharepoint.com/personal/zoek_kljjiajia_onmicrosoft_com/_layouts/52/download.aspx?share=EWHshZg2Su5Mu0r5KBsZQ0wBdBoWn5oXJuvzV5tOVOerzQ"
               }
             ],
             "男子双打": [
               {
+                "回战": "资格赛",
+                "对手": "PODOBNIK Miha/VOVK Brin (斯洛文尼亚)",
+                "比分": "3-1(11-4,6-11,11-6,11-7)",
+                "结果": "胜",
+                "video": "https://kljjiajia-my.sharepoint.com/personal/zoek_kljjiajia_onmicrosoft_com/_layouts/52/download.aspx?share=ER5m6IG_CC5JhmSjfskmV1gBBUSjDa04_1PIFMAV5RAylg"
+              },
+              {
                 "回战": "R16",
                 "对手": "李尚洙/吴晙诚 (韩国)",
                 "比分": "1-3(11-13,8-11,11-4,6-11)",
-                "结果": "负"
-              },
-              {
-                "回战": "四分之一决赛",
-                "对手": "PODOBNIK Miha/VOVK Brin (斯洛文尼亚)",
-                "比分": "3-1(11-4,6-11,11-6,11-7)",
-                "结果": "胜"
+                "结果": "负",
+                "video": "https://kljjiajia-my.sharepoint.com/personal/zoek_kljjiajia_onmicrosoft_com/_layouts/52/download.aspx?share=EfPX3AxPf1lLr4105vHSYZ0BCPTXuHtNT7e6gcE5a3lCcQ"
               }
             ],
             "混合双打": [
@@ -5592,26 +5608,30 @@
                 "回战": "R16",
                 "对手": "维托尔·艾什/高桥布鲁娜（巴西）",
                 "比分": "3-0(12-10,11-8,11-9)",
-                "结果": "胜"
+                "结果": "胜",
+                "video": "https://kljjiajia-my.sharepoint.com/personal/zoek_kljjiajia_onmicrosoft_com/_layouts/52/download.aspx?share=EQYFgq1hdolPj0ANp58-gl4BOj7C0Oz6aPB-8xTOUFvuRA"
               },
               {
                 "回战": "四分之一决赛",
                 "对手": "爱德华·约内斯库/伊丽莎白·萨马拉 (罗马尼亚)",
                 "比分": "3-0(11-5,11-6,11-6)",
-                "结果": "胜"
+                "结果": "胜",
+                "video": "https://kljjiajia-my.sharepoint.com/personal/zoek_kljjiajia_onmicrosoft_com/_layouts/52/download.aspx?share=EftMUHNemhBAp3G5MVQLH4wB7gZHMLkE-QY3WA3lW5Lq2A"
               },
               {
                 "回战": "半决赛",
                 "对手": "吴晙诚/田志希 (韩国)",
                 "比分": "3-2(11-8,11-3,9-11,11-5,12-14)",
-                "结果": "胜"
+                "结果": "胜",
+                "video": "https://kljjiajia-my.sharepoint.com/personal/zoek_kljjiajia_onmicrosoft_com/_layouts/52/download.aspx?share=EdQUFNOw499PmOsM-yfgDWsB_EE3c2nBRReCVWzTJiWYaA"
               },
               {
                 "回战": "决赛",
                 "对手": "林钟勋/申裕斌（韩国）",
                 "比分": "3-2(11-5,8-11,11-7,5-11,11-3)",
                 "结果": "胜",
-                "决赛": true
+                "决赛": true,
+                "video": "https://kljjiajia-my.sharepoint.com/personal/zoek_kljjiajia_onmicrosoft_com/_layouts/52/download.aspx?share=EcpSy-LRG6BGgTXnbf1LAUMBaJZpIQiHD_LIQ_ryhBQeXg"
               }
             ]
           }
