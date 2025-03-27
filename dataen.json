@@ -8441,46 +8441,45 @@
             ],
             "Men's Team": [
               {
-                "回战": "Main Draw R16",
-                "对手": "BAE Hwan (AUS)",
-                "比分": "3 - 0(11:4, 11:4, 14:12)",
-                "结果": "胜"
+                "回战": "R16",
+                "对手": "Australia",
+                "比分": "3-0",
+                "结果": "胜",
+                "详情": "② Tomokazu HARIMOTO 3(11-4, 11-4, 14-12)0 Hwan BAE",
+                "video": "https://kljjiajia-my.sharepoint.com/personal/zoek_kljjiajia_onmicrosoft_com/_layouts/52/download.aspx?share=ETwGL8ar4MdGoDs4Ns_Dw-cBZOiuyRCFnwOvr-hMRVbY-Q"
               },
               {
-                "回战": "Main Draw QuarterFinal",
-                "对手": "CHUANG Chih-Yuan (TPE)",
-                "比分": "3 - 0(11:7, 11:8, 11:9)",
-                "结果": "胜"
+                "回战": "QuarterFinal",
+                "对手": "Chinese Taipei",
+                "比分": "3-1",
+                "结果": "胜",
+                "详情": "② Tomokazu HARIMOTO 2(9-11, 11-9, 7-11, 11-3, 6-11)3 LIN Yun-Ju<br>④ Tomokazu HARIMOTO 3(11-7, 11-8, 11-9)0 CHUANG Chih-Yuan",
+                "videos": [
+                  "https://kljjiajia-my.sharepoint.com/personal/zoek_kljjiajia_onmicrosoft_com/_layouts/52/download.aspx?share=ES1B4dAtb51PmjY2ncPKAy0Bn1zgCXoOqkVyPmziqw9gNw",
+                  "https://kljjiajia-my.sharepoint.com/personal/zoek_kljjiajia_onmicrosoft_com/_layouts/52/download.aspx?share=EQY6wLOme7FFhgglbKy8iMYBtEkFGSp7_1owKkun5iq_jA"
+                ]
               },
               {
-                "回战": "Main Draw QuarterFinal",
-                "对手": "LIN Yun-Ju (TPE)",
-                "比分": "2 - 3(9:11, 11:9, 7:11, 11:3, 6:11)",
-                "结果": "负"
+                "回战": "SemiFinal",
+                "对手": "Sweden",
+                "比分": "2-3",
+                "结果": "负",
+                "详情": "② Tomokazu HARIMOTO 3(13-11, 9-11, 11-5, 12-10)1 MOREGARD Truls<br>④ Tomokazu HARIMOTO 2(11-5, 11-5, 7-11, 7-11, 9-11)3 KALLBERG Anton",
+                "videos": [
+                  "https://kljjiajia-my.sharepoint.com/personal/zoek_kljjiajia_onmicrosoft_com/_layouts/52/download.aspx?share=EfvtWtT6f09ArAZiAGgeDz0BE2FecpZl8AiuavngpI8C3A",
+                  "https://kljjiajia-my.sharepoint.com/personal/zoek_kljjiajia_onmicrosoft_com/_layouts/52/download.aspx?share=ESDg6nfaCbVCv5m_BAmHeG0Bj8-30zB9PxaHQepTpDorig"
+                ]
               },
               {
                 "回战": "Position Draw 2",
-                "对手": "GAUZY Simon (FRA)",
-                "比分": "3 - 1(11:8, 8:11, 11:8, 14:12)",
-                "结果": "胜"
-              },
-              {
-                "回战": "Position Draw 2",
-                "对手": "LEBRUN Felix (FRA)",
-                "比分": "2 - 3(13:11, 4:11, 11:9, 6:11, 10:12)",
-                "结果": "负"
-              },
-              {
-                "回战": "Main Draw SemiFinal",
-                "对手": "KALLBERG Anton (SWE)",
-                "比分": "2 - 3(11:5, 11:5, 7:11, 7:11, 9:11)",
-                "结果": "负"
-              },
-              {
-                "回战": "Main Draw SemiFinal",
-                "对手": "MOREGARD Truls (SWE)",
-                "比分": "3 - 1(13:11, 9:11, 11:5, 12:10)",
-                "结果": "胜"
+                "对手": "France",
+                "比分": "2-3",
+                "结果": "负",
+                "详情": "② Tomokazu HARIMOTO 2(13-11, 4-11, 11-9, 6-11, 10-12)3 LEBRUN Felix<br>④ Tomokazu HARIMOTO 3(11-8, 8-11, 11-8, 14-12)1 GAUZY Simon",
+                "videos": [
+                  "https://kljjiajia-my.sharepoint.com/personal/zoek_kljjiajia_onmicrosoft_com/_layouts/52/download.aspx?share=ET8nnqcmj8hKiFd4PTjSwAcBOp0fKRUMrFzbXXmYlUILvQ",
+                  "https://kljjiajia-my.sharepoint.com/personal/zoek_kljjiajia_onmicrosoft_com/_layouts/52/download.aspx?share=ETvX5_vQcXtJl-h8tIKM30ABKLwJgCK1M-YZgJiLuEG8eQ"
+                ]
               }
             ]
           }
