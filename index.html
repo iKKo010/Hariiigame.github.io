@@ -1319,7 +1319,7 @@
         const content = document.getElementById('contentDetails');
         const event = getEventData(state);
         const rounds = event.项目[state.project];
-        const isTeamEvent = state.project.includes("团体"); // 新增团体赛判断
+        const isTeamEvent = state.project.includes("团体") || state.project.includes("Team") || state.project.includes("団体"); // 团体赛判断
 
         content.innerHTML = `
             <h2>${event.比赛名称} - ${state.project}</h2>
