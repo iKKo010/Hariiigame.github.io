@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>张本智和赛事记录汇总</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-sha256/0.9.0/sha256.min.js"></script>
     <style>
         :root {
             --blue-50: #f0f9ff;
@@ -871,6 +872,28 @@
             z-index: 100;
             pointer-events: none;
         }
+
+        /* 团体赛详情样式 */
+        .round-subdetails {
+            margin-top: 8px;
+            padding-left: 20px;
+            border-left: 2px solid var(--blue-200);
+        }
+
+        .team-detail-line {
+            margin: 6px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .team-video-btn {
+            margin-left: auto;
+            font-size: 0.9em;
+            padding: 4px;
+            background: var(--blue-100);
+            border-radius: 4px;
+        }
         
     </style>
 </head>
@@ -946,6 +969,16 @@
 
     // 修改后的初始化函数
     async function initialize(lang) {
+        // 新增密码加载
+        try {
+            const authResponse = await fetch('auth.json');
+            if (!authResponse.ok) throw new Error('验证文件加载失败');
+            const authData = await authResponse.json();
+            appState.auth.validCodes = new Set(authData.validCodes);
+        } catch (error) {
+            console.error('密码系统初始化失败:', error);
+            appState.auth.validCodes = new Set(['emergency_code']); // 保留一个紧急代码
+        }
         // 移除所有active状态
         document.querySelectorAll('.lang-item').forEach(item => {
             item.classList.remove('active');
@@ -1297,7 +1330,8 @@
         const content = document.getElementById('contentDetails');
         const event = getEventData(state);
         const rounds = event.项目[state.project];
-        
+        const isTeamEvent = state.project.includes("团体"); // 新增团体赛判断
+
         content.innerHTML = `
             <h2>${event.比赛名称} - ${state.project}</h2>
             <div class="match-details">
@@ -1312,20 +1346,63 @@
                                 <span class="stage">${round.回战}</span>
                                 <span class="vs">vs</span>
                                 <span class="opponent">${round.对手}</span>
+                                ${!isTeamEvent ? showVideoElements(round) : ''} <!-- 非团体赛显示在标题行 -->
                             </div>
                             <div class="round-details">
                                 <span class="score">${round.比分}</span>
                                 ${round.决赛 ? '<i class="fas fa-trophy icon-trophy"></i>' : ''}
-                                ${showVideoButton(round)} <!-- 新增视频按钮 -->
                             </div>
-                            ${round.详情 ? `<p class="round-note">${round.详情}</p>` : ''}
+                            ${round.详情 ? `
+                                <div class="round-subdetails">
+                                    ${formatTeamDetails(round.详情, round)} <!-- 处理团体赛详情 -->
+                                </div>
+                            ` : ''}
                         </div>
                     `).join('')}
                 </div>
             </div>
         `;
+
+        // 新增格式化团体赛详情函数
+        function formatTeamDetails(details, round) {
+            const lines = details.split('<br>');
+            const videos = round.videos || (round.video ? [round.video] : []);
+            
+            return lines.map((line, index) => `
+                <div class="team-detail-line">
+                    ${line}
+                    ${videos[index] ? showTeamVideoButton(videos[index], index+1) : ''}
+                </div>
+            `).join('');
+        }
+
+        // 新增团体赛视频按钮
+        function showTeamVideoButton(videoUrl, index) {
+            return `<i class="fas fa-video video-icon team-video-btn" 
+                    onclick="handleVideoClick('${videoUrl}')"
+                    title="观看第${index}场比赛视频"></i>`;
+        }
+
+        // 更新视频元素显示逻辑
+        function showVideoElements(round) {
+            let elements = [];
+            if (round.video) {
+                elements.push(showVideoButton(round));
+            }
+            if (round.videos) {
+                elements.push(...round.videos.map((v, i) => showMultiVideoButton(v, i+1)));
+            }
+            return elements.join('');
+        }
     }
 
+    function showMultiVideoButton(videoUrl, index) {
+        return `<i class="fas fa-video video-icon" 
+                onclick="handleVideoClick('${videoUrl}')"
+                title="观看第${index}场比赛视频"
+                style="margin-left: 8px"></i>`;
+    }
+    
     // 修改updatePath函数
     function updatePath() {
         const currentState = appState.historyStack[appState.currentIndex];
@@ -1644,7 +1721,7 @@
                             <span>画质选择</span>
                             <i class="fas fa-chevron-right"></i>
                             <div class="submenu">
-                                <div class="menu-item" data-quality="auto"><i class="fas fa-check"></i>自动</div>
+                                <div class="menu-item" data-quality="auto"></i>自动</div>
                                 <div class="menu-item" data-quality="hd">高清 1080P</div>
                                 <div class="menu-item" data-quality="sd">标清 720P</div>
                             </div>
@@ -2034,36 +2111,21 @@
         }, 200);
     }
 
-    async function handleAuth() {
-      const modal = document.getElementById('authModal');
-      const inputCode = document.getElementById('authCode').value.trim();
-      
-      try {
-        const response = await fetch('/api/auth/verify', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ password: inputCode })
-        });
-    
-        if (!response.ok) throw new Error('验证请求失败');
+    function handleAuth() {
+        const modal = document.getElementById('authModal');
+        const inputCode = document.getElementById('authCode').value.trim();
         
-        const result = await response.json();
-        
-        if (result.valid) {
-          closeAuthModal();
-          if (typeof modal._callback === 'function') {
-            modal._callback();
-          }
+        // 添加哈希验证
+        const hashedInput = sha256(inputCode); // 需要引入SHA256库
+        if (appState.auth.validCodes.has(hashedInput)) {
+            closeAuthModal();
+            if (typeof modal._callback === 'function') {
+                modal._callback();
+            }
         } else {
-          alert("验证码错误，请重新输入");
-          document.getElementById('authCode').value = '';
+            alert("验证码错误，请重新输入");
+            document.getElementById('authCode').value = '';
         }
-      } catch (error) {
-        console.error('验证失败:', error);
-        alert("验证服务暂时不可用，请稍后再试");
-      }
     }
 
     // 导航到赛事的公共方法
