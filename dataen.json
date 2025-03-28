@@ -9017,6 +9017,45 @@
               }
             ]
           }
+        },
+        {
+          "比赛名称": "WTT Star Contender Chennai 2025",
+          "日期": "March 25-30",
+          "地点": "Chennai, India Jawaharlal Nehru Indoor Stadium",
+          "项目": {
+            "Men's Singles": [
+              {
+                "回战": "Main Draw R32",
+                "对手": "Maharu YOSHIMURA（JPN）",
+                "比分": "0-0",
+                "结果": "none",
+                "video": ""
+              }
+            ],
+            "Men's Doubles": [
+              {
+                "回战": "Main Draw R16",
+                "对手": "Anirban GHOSH/Sarth MISHRA（IND）",
+                "比分": "3-0（11-7,11-8,11-8）",
+                "结果": "胜",
+                "video": ""
+              },
+              {
+                "回战": "Main Draw QuarterFinal",
+                "对手": "Hwan BAE/Flavien COTON（AUS/FRA）",
+                "比分": "3-0(11-9,11-8,11-8)",
+                "结果": "胜",
+                "video": ""
+              },
+              {
+                "回战": "Main Draw SemiFinal",
+                "对手": "WONG Chun Ting/CHAN Baldwin（HKG）",
+                "比分": "0-0",
+                "结果": "",
+                "video": ""
+              }
+            ]
+          }
         }
       ]
     }
