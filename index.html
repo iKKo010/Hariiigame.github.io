@@ -1090,7 +1090,11 @@
             event: null,
             project: null
         };
-
+        
+        function escapeParam(param) {
+            return param.replace(/'/g, "\\'");
+        }
+        
         switch(type) {
             case 'category':
                 newState.category = value;
@@ -1196,7 +1200,7 @@
             <h2>${state.category}</h2>
             <div class="card-container">
                 ${years.map(year => `
-                    <div class="content-card" onclick="navigateTo('year', '${year}', '${state.category}')">
+                     onclick="navigateTo('year', '${year}', '${state.category}')">
                         <h3>${year}年</h3>
                         <p>包含 ${Object.keys(appState.currentData[state.category][year]).length} 个月份</p>
                     </div>
@@ -1258,7 +1262,7 @@
                 <h4>参赛项目</h4>
                 <div class="card-container">
                     ${Object.keys(event.项目).map(project => `
-                        <div class="content-card" onclick="navigateTo('project', '${project}', '${state.category}', '${state.year}', '${state.month}', '${event.比赛名称}')">
+                        <div class="content-card" onclick="navigateTo('project', '${project.replace(/'/g, "\\'")}', '${state.category.replace(/'/g, "\\'")}', '${state.year.replace(/'/g, "\\'")}', '${state.month.replace(/'/g, "\\'")}', '${event.比赛名称.replace(/'/g, "\\'")}')">
                             ${project}
                         </div>
                     `).join('')}
@@ -1516,8 +1520,13 @@
 
     // 获取当前赛事数据
     function getEventData(state) {
-        return appState.currentData[state.category][state.year][state.month]
-            .find(e => e.比赛名称 === state.event);
+        const categoryKey = state.category.replace(/'/g, ""); // 去除转义字符
+        const yearKey = state.year.replace(/'/g, "");
+        const monthKey = state.month.replace(/'/g, "");
+        const eventKey = state.event.replace(/'/g, "");
+        
+        return appState.currentData[categoryKey][yearKey][monthKey]
+            .find(e => e.比赛名称 === eventKey);
     }
 
     // 语言切换
