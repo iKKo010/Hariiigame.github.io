@@ -1546,56 +1546,20 @@
     /* 搜索系统核心功能 */
     function buildSearchCache(data) {
         appState.search.eventCache = [];
-        const opponentRegex = /(?:^|\s|\)|>)(?!张本智和|Harimoto|Tomokazu)([\u4e00-\u9fa5]{2,}(?:·[\u4e00-\u9fa5]+)?|[A-Za-z]{2,}(?:[\s-][A-Za-z]+)+)(?=\s*[\d(（<]|$)/g;
         Object.entries(data).forEach(([category, years]) => {
             Object.entries(years).forEach(([year, months]) => {
                 Object.entries(months).forEach(([month, events]) => {
                     events.forEach(event => {
-                        // 收集所有对手和地点
-                        const opponents = new Set();
-                        const locations = new Set([event.地点]);
-                        
-                        Object.values(event.项目).forEach(rounds => {
-                            rounds.forEach(round => {
-                                // 基础对手收集
-                                if(round.对手 && round.对手 !== 'BYE') {
-                                    opponents.add(round.对手);
-                                }
-                                
-                                // 新增：处理团体赛详情中的对手
-                                if(round.详情) {
-                                    // 分割多个对战记录
-                                    const battles = round.详情.split(/<br>|\n/);
-                                    battles.forEach(battle => {
-                                        let match;
-                                        while ((match = opponentRegex.exec(battle)) !== null) {
-                                            const name = match[1]
-                                                .replace(/[\d()]/g, '') // 移除残留数字和括号
-                                                .trim();
-                                            if(name.length > 1) {
-                                                opponents.add(name);
-                                            }
-                                        }
-                                    });
-                                }
-                                if(round.地点) {
-                                    locations.add(round.地点);
-                                }
-                            });
-                        });
-
                         appState.search.eventCache.push({
-                            category,
-                            year,
-                            month,
+                            category,  // 新增分类
+                            year,      // 新增年份
+                            month,     // 新增月份
                             name: event.比赛名称,
                             cn: event.比赛名称,
                             jp: event.比赛名称JP || event.比赛名称,
                             en: event.eventNameEN || event.比赛名称,
                             date: event.日期,
-                            locations: Array.from(locations), // 所有相关地点
-                            opponents: Array.from(opponents), // 所有对手
-                            rawEvent: event // 保留原始数据用于高亮
+                            location: event.地点
                         });
                     });
                 });
@@ -1646,10 +1610,9 @@
                 onclick="navigateToEvent('${event.category}', '${event.year}', '${event.month}', '${event.name}')">
                 <i class="fas fa-table-tennis match-icon"></i>
                 <div>
-                    ${highlightMatch(event, query)}
-                    <small style="color: var(--blue-500);display:block;margin-top:4px">
-                        ${event.date} · ${event.locations[0]}
-                        ${event.opponents.length ? `· ${event.opponents.length}位对手` : ''}
+                    <div>${highlightMatch(event.name, query)}</div>
+                    <small style="color: var(--blue-500)">
+                        ${event.date} · ${event.location}
                     </small>
                 </div>
             </div>
@@ -1659,93 +1622,15 @@
     }
 
     function matchEvent(event, query) {
-        const q = query.toLowerCase().trim();
-        if(!q) return false;
-
-        // 拆分为OR条件（支持|符号）
-        const terms = q.split(/\s+/).filter(t => t);
-        const orGroups = terms.map(t => t.split('|')); 
-
-        // 构建扩展搜索字段（包含规范化名称）
-        const searchFields = [
-            ...event.locations.map(normalizeText),
-            ...event.opponents.map(normalizeText),
-            normalizeText(event.cn),
-            normalizeText(event.jp),
-            normalizeText(event.en)
-        ];
-
-        // 检查所有OR组
-        return orGroups.every(orTerms => 
-            orTerms.some(term => 
-                searchFields.some(field => 
-                    field.includes(normalizeText(term))
-                )
-            )
+        const q = query.toLowerCase();
+        return [event.cn, event.jp, event.en].some(text => 
+            text.toLowerCase().includes(q)
         );
     }
 
-    function normalizeText(text) {
-        return text
-            .toLowerCase()
-            .normalize("NFD") // 分解重音字符
-            .replace(/[\u0300-\u036f]/g, "") // 移除音调符号
-            .replace(/[·・]/g, ' ')    // 统一分隔符
-            .replace(/[^a-z0-9\u4e00-\u9fa5\s]/g, ''); // 保留基本字符
-    }
-
-    function highlightMatch(event, query) {
-        const terms = normalizeText(query).split(/\s+/);
-        let highlights = [];
-
-        // 搜索所有匹配维度
-        event.opponents.forEach(opponent => {
-            const normOpp = normalizeText(opponent);
-            terms.forEach(term => {
-                if(normOpp.includes(term)) {
-                    highlights.push({
-                        type: 'opponent',
-                        content: `<i class="fas fa-user"></i> ${applyHighlight(opponent, terms)}`
-                    });
-                }
-            });
-        });
-
-        event.locations.forEach(location => {
-            const normLoc = normalizeText(location);
-            terms.forEach(term => {
-                if(normLoc.includes(term)) {
-                    highlights.push({
-                        type: 'location',
-                        content: `<i class="fas fa-map-marker-alt"></i> ${applyHighlight(location, terms)}`
-                    });
-                }
-            });
-        });
-
-        // 去重并排序
-        highlights = highlights.filter((v,i,a)=>a.findIndex(t=>(t.content === v.content))===i)
-            .sort((a,b) => b.type.localeCompare(a.type));
-
-        return `
-            <div>${applyHighlight(event.name, terms)}</div>
-            ${highlights.slice(0,2).map(h => `
-                <div class="match-context">
-                    ${h.content}
-                </div>
-            `).join('')}
-            <small style="color: var(--blue-500);display:block;margin-top:4px">
-                ${event.date} · ${event.locations[0]}
-                ${event.opponents.length ? `· 对战 ${event.opponents.join(', ')}` : ''}
-            </small>
-        `;
-    }
-
-    function applyHighlight(text, terms) {
-        return terms.reduce((str, term) => {
-            const regex = new RegExp(`(${escapeRegExp(term)})`, 'gi');
-            return str.replace(regex, '<span class="result-highlight">$1</span>');
-        }, text);
+    function highlightMatch(text, query) {
+        const regex = new RegExp(`(${escapeRegExp(query)})`, 'gi');
+        return text.replace(regex, '<span class="result-highlight">$1</span>');
     }
 
     function escapeRegExp(string) {
